@@ -1,4 +1,4 @@
-module EditableWebData
+module Editable.WebData
     exposing
         ( EditableWebData(..)
         , map
@@ -34,10 +34,10 @@ back to the backend via `WebData`.
     view editableWebData =
         let
             toEditable =
-                EditableWebData.toEditable |> Editable.value
+                Editable.WebData.toEditable |> Editable.value
 
             toWebData =
-                EditableWebData.toWebData
+                Editable.WebData.toWebData
         in
         text <| "Editable value is: " ++ toString toEditable ++ " with a WebDataValue of " ++ toString toWebData
 
@@ -57,10 +57,10 @@ notAskedReadOnly record =
 
     import Editable
 
-    EditableWebData.notAskedReadOnly "old"
-        |> EditableWebData.map (Editable.edit)
-        |> EditableWebData.map (Editable.update "new")
-        |> EditableWebData.toEditable
+    Editable.WebData.notAskedReadOnly "old"
+        |> Editable.WebData.map (Editable.edit)
+        |> Editable.WebData.map (Editable.update "new")
+        |> Editable.WebData.toEditable
         |> Editable.value --> "new"
 
 -}
@@ -75,13 +75,13 @@ For updating the toEditable of the `Editable` itself, see the example of `map`.
 
     import RemoteData
 
-    EditableWebData.notAskedReadOnly "new"
-        |> EditableWebData.state RemoteData.Loading
-        |> EditableWebData.toWebData --> RemoteData.Loading
+    Editable.WebData.notAskedReadOnly "new"
+        |> Editable.WebData.state RemoteData.Loading
+        |> Editable.WebData.toWebData --> RemoteData.Loading
 
-    EditableWebData.notAskedReadOnly "new"
-        |> EditableWebData.state (RemoteData.Success ())
-        |> EditableWebData.toWebData --> RemoteData.Success ()
+    Editable.WebData.notAskedReadOnly "new"
+        |> Editable.WebData.state (RemoteData.Success ())
+        |> Editable.WebData.toWebData --> RemoteData.Success ()
 
 -}
 state : WebData () -> EditableWebData a -> EditableWebData a
@@ -93,13 +93,13 @@ state newWebData (EditableWebData editable webData) =
 
     import Editable
 
-    EditableWebData.notAskedReadOnly "new"
-        |> EditableWebData.toEditable --> Editable.ReadOnly "new"
+    Editable.WebData.notAskedReadOnly "new"
+        |> Editable.WebData.toEditable --> Editable.ReadOnly "new"
 
-    EditableWebData.notAskedReadOnly "old"
-        |> EditableWebData.map(Editable.edit)
-        |> EditableWebData.map(Editable.update "new")
-        |> EditableWebData.toEditable --> Editable.Editable "old" "new"
+    Editable.WebData.notAskedReadOnly "old"
+        |> Editable.WebData.map(Editable.edit)
+        |> Editable.WebData.map(Editable.update "new")
+        |> Editable.WebData.toEditable --> Editable.Editable "old" "new"
 
 -}
 toEditable : EditableWebData a -> Editable a
@@ -111,12 +111,12 @@ toEditable (EditableWebData x _) =
 
     import RemoteData
 
-    EditableWebData.notAskedReadOnly "new"
-        |> EditableWebData.toWebData --> RemoteData.NotAsked
+    Editable.WebData.notAskedReadOnly "new"
+        |> Editable.WebData.toWebData --> RemoteData.NotAsked
 
-    EditableWebData.notAskedReadOnly "new"
-        |> EditableWebData.state RemoteData.Loading
-        |> EditableWebData.toWebData --> RemoteData.Loading
+    Editable.WebData.notAskedReadOnly "new"
+        |> Editable.WebData.state RemoteData.Loading
+        |> Editable.WebData.toWebData --> RemoteData.Loading
 
 -}
 toWebData : EditableWebData a -> WebData ()
