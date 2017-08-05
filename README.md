@@ -3,7 +3,7 @@
 EditableWebData
 ========
 
-> An EditableWebData represents an Editable value, along with WebData.
+> An EditableWebData represents an [Editable](http://package.elm-lang.org/packages/stoeffel/editable/latest) value, along with [WebData](http://package.elm-lang.org/packages/krisajenkins/remotedata/latest).
 
 
 ## Installation
