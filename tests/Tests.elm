@@ -10,11 +10,11 @@ import Test exposing (..)
 all : Test
 all =
     describe "EditableWebData"
-        [ describe "#value"
+        [ describe "#toEditable"
             [ fuzz string "return the `Editable` value" <|
                 \value ->
                     EditableWebData.notAskedReadOnly value
-                        |> EditableWebData.value
+                        |> EditableWebData.toEditable
                         |> Expect.equal (Editable.ReadOnly value)
             ]
         ]

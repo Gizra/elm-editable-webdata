@@ -3,9 +3,9 @@ module EditableWebData
         ( EditableWebData(..)
         , mapEditable
         , notAskedReadOnly
-        , value
+        , toEditable
+        , toWebData
         , webDataUpdate
-        , webDataValue
         )
 
 {-| An EditableWebData represents an Editable value, along with WebData.
@@ -14,10 +14,10 @@ module EditableWebData
 and [WebData](http://package.elm-lang.org/packages/krisajenkins/remotedata/latest)
 
 It is used in order to keep track of the state of the Editable upon saving. That is,
-as we change teh `Editable` value, and send it to the backend, we can keep track of their status
+as we change teh `Editable` toEditable, and send it to the backend, we can keep track of their status
 (e.g. `RemoteData.Success` or `RemoteData.Failure`).
 
-@docs EditableWebData, notAskedReadOnly, mapEditable, value, webDataUpdate, webDataValue
+@docs EditableWebData, notAskedReadOnly, mapEditable, toEditable, webDataUpdate, toWebData
 
 -}
 
@@ -33,13 +33,13 @@ back to the backend via `WebData`.
     view : EditableWebData String -> Html msg
     view editableWebData =
         let
-            value =
-                EditableWebData.value |> Editable.value
+            toEditable =
+                EditableWebData.toEditable |> Editable.value
 
-            webDataValue =
-                EditableWebData.webDataValue
+            toWebData =
+                EditableWebData.toWebData
         in
-        text <| "Editable value is: " ++ toString value ++ " with a WebDataValue of " ++ toString webDataValue
+        text <| "Editable value is: " ++ toString toEditable ++ " with a WebDataValue of " ++ toString toWebData
 
 -}
 type EditableWebData a
@@ -60,7 +60,7 @@ notAskedReadOnly record =
     EditableWebData.notAskedReadOnly "old"
         |> EditableWebData.mapEditable (Editable.edit)
         |> EditableWebData.mapEditable (Editable.update "new")
-        |> EditableWebData.value
+        |> EditableWebData.toEditable
         |> Editable.value --> "new"
 
 -}
@@ -69,19 +69,19 @@ mapEditable f (EditableWebData editable webData) =
     EditableWebData (f editable) webData
 
 
-{-| Updates the `WebData` value.
+{-| Updates the `WebData` toEditable.
 
-For updating the value of the `Editable` itself, see the example of `mapEditable`.
+For updating the toEditable of the `Editable` itself, see the example of `mapEditable`.
 
     import RemoteData
 
     EditableWebData.notAskedReadOnly "new"
         |> EditableWebData.webDataUpdate RemoteData.Loading
-        |> EditableWebData.webDataValue --> RemoteData.Loading
+        |> EditableWebData.toWebData --> RemoteData.Loading
 
     EditableWebData.notAskedReadOnly "new"
         |> EditableWebData.webDataUpdate (RemoteData.Success ())
-        |> EditableWebData.webDataValue --> RemoteData.Success ()
+        |> EditableWebData.toWebData --> RemoteData.Success ()
 
 -}
 webDataUpdate : WebData () -> EditableWebData a -> EditableWebData a
@@ -89,36 +89,36 @@ webDataUpdate newWebData (EditableWebData editable webData) =
     EditableWebData editable newWebData
 
 
-{-| Extracts the `Editable` value.
+{-| Extracts the `Editable` toEditable.
 
     import Editable
 
     EditableWebData.notAskedReadOnly "new"
-        |> EditableWebData.value --> Editable.ReadOnly "new"
+        |> EditableWebData.toEditable --> Editable.ReadOnly "new"
 
     EditableWebData.notAskedReadOnly "old"
         |> EditableWebData.mapEditable(Editable.edit)
         |> EditableWebData.mapEditable(Editable.update "new")
-        |> EditableWebData.value --> Editable.Editable "old" "new"
+        |> EditableWebData.toEditable --> Editable.Editable "old" "new"
 
 -}
-value : EditableWebData a -> Editable a
-value (EditableWebData x _) =
+toEditable : EditableWebData a -> Editable a
+toEditable (EditableWebData x _) =
     x
 
 
-{-| Extracts the `WebData` value.
+{-| Extracts the `WebData` toEditable.
 
     import RemoteData
 
     EditableWebData.notAskedReadOnly "new"
-        |> EditableWebData.webDataValue --> RemoteData.NotAsked
+        |> EditableWebData.toWebData --> RemoteData.NotAsked
 
     EditableWebData.notAskedReadOnly "new"
         |> EditableWebData.webDataUpdate RemoteData.Loading
-        |> EditableWebData.webDataValue --> RemoteData.Loading
+        |> EditableWebData.toWebData --> RemoteData.Loading
 
 -}
-webDataValue : EditableWebData a -> WebData ()
-webDataValue (EditableWebData _ x) =
+toWebData : EditableWebData a -> WebData ()
+toWebData (EditableWebData _ x) =
     x
