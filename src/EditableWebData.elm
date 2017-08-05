@@ -1,8 +1,8 @@
 module EditableWebData
     exposing
         ( EditableWebData(..)
-        , create
         , mapEditable
+        , notAskedReadOnly
         , value
         , webDataUpdate
         , webDataValue
@@ -17,7 +17,7 @@ It is used in order to keep track of the state of the Editable upon saving. That
 as we change teh `Editable` value, and send it to the backend, we can keep track of their status
 (e.g. `RemoteData.Success` or `RemoteData.Failure`).
 
-@docs EditableWebData, create, mapEditable, value, webDataUpdate, webDataValue
+@docs EditableWebData, notAskedReadOnly, mapEditable, value, webDataUpdate, webDataValue
 
 -}
 
@@ -48,8 +48,8 @@ type EditableWebData a
 
 {-| Creates a new `EditableWebData`.
 -}
-create : a -> EditableWebData a
-create record =
+notAskedReadOnly : a -> EditableWebData a
+notAskedReadOnly record =
     EditableWebData (Editable.ReadOnly record) NotAsked
 
 
@@ -75,11 +75,11 @@ For updating the value of the `Editable` itself, see the example of `mapEditable
 
     import RemoteData
 
-    EditableWebData.create "new"
+    EditableWebData.notAskedReadOnly "new"
         |> EditableWebData.webDataUpdate RemoteData.Loading
         |> EditableWebData.webDataValue --> RemoteData.Loading
 
-    EditableWebData.create "new"
+    EditableWebData.notAskedReadOnly "new"
         |> EditableWebData.webDataUpdate (RemoteData.Success ())
         |> EditableWebData.webDataValue --> RemoteData.Success ()
 
@@ -93,10 +93,10 @@ webDataUpdate newWebData (EditableWebData editable webData) =
 
     import Editable
 
-    EditableWebData.create "new"
+    EditableWebData.notAskedReadOnly "new"
         |> EditableWebData.value --> Editable.ReadOnly "new"
 
-    EditableWebData.create "old"
+    EditableWebData.notAskedReadOnly "old"
         |> EditableWebData.mapEditable(Editable.edit)
         |> EditableWebData.mapEditable(Editable.update "new")
         |> EditableWebData.value --> Editable.Editable "old" "new"
@@ -111,10 +111,10 @@ value (EditableWebData x _) =
 
     import RemoteData
 
-    EditableWebData.create "new"
+    EditableWebData.notAskedReadOnly "new"
         |> EditableWebData.webDataValue --> RemoteData.NotAsked
 
-    EditableWebData.create "new"
+    EditableWebData.notAskedReadOnly "new"
         |> EditableWebData.webDataUpdate RemoteData.Loading
         |> EditableWebData.webDataValue --> RemoteData.Loading
 

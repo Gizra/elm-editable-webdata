@@ -13,7 +13,7 @@ all =
         [ describe "#value"
             [ fuzz string "return the `Editable` value" <|
                 \value ->
-                    EditableWebData.create value
+                    EditableWebData.notAskedReadOnly value
                         |> EditableWebData.value
                         |> Expect.equal (Editable.ReadOnly value)
             ]
