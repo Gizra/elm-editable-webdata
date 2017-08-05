@@ -14,7 +14,7 @@ module Editable.WebData
 and [WebData](http://package.elm-lang.org/packages/krisajenkins/remotedata/latest)
 
 It is used in order to keep track of the state of the Editable upon saving. That is,
-as we change teh `Editable` toEditable, and send it to the backend, we can keep track of their status
+as we change the `Editable` value, and send it to the backend, we can keep track of their status
 (e.g. `RemoteData.Success` or `RemoteData.Failure`).
 
 @docs EditableWebData, notAskedReadOnly, map, toEditable, state, toWebData
@@ -33,13 +33,13 @@ back to the backend via `WebData`.
     view : EditableWebData String -> Html msg
     view editableWebData =
         let
-            toEditable =
+            value =
                 Editable.WebData.toEditable |> Editable.value
 
             toWebData =
                 Editable.WebData.toWebData
         in
-        text <| "Editable value is: " ++ toString toEditable ++ " with a WebDataValue of " ++ toString toWebData
+        text <| "Editable value is: " ++ toString value ++ " with a WebDataValue of " ++ toString toWebData
 
 -}
 type EditableWebData a
@@ -69,9 +69,9 @@ map f (EditableWebData editable webData) =
     EditableWebData (f editable) webData
 
 
-{-| Updates the `WebData` toEditable.
+{-| Updates the `WebData` value.
 
-For updating the toEditable of the `Editable` itself, see the example of `map`.
+For updating the value of the `Editable` itself, see the example of `map`.
 
     import RemoteData
 
@@ -89,7 +89,7 @@ state newWebData (EditableWebData editable webData) =
     EditableWebData editable newWebData
 
 
-{-| Extracts the `Editable` toEditable.
+{-| Extracts the `Editable` value.
 
     import Editable
 
@@ -107,7 +107,7 @@ toEditable (EditableWebData x _) =
     x
 
 
-{-| Extracts the `WebData` toEditable.
+{-| Extracts the `WebData` value.
 
     import RemoteData
 
