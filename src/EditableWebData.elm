@@ -2,9 +2,7 @@ module EditableWebData
     exposing
         ( EditableWebData(..)
         , create
-        , map
         , mapEditable
-        , update
         , value
         , webDataUpdate
         , webDataValue
@@ -19,7 +17,7 @@ It is used in order to keep track of the state of the Editable upon saving. That
 as we change teh `Editable` value, and send it to the backend, we can keep track of their status
 (e.g. `RemoteData.Success` or `RemoteData.Failure`).
 
-@docs EditableWebData, create, map, mapEditable, update, value, webDataUpdate, webDataValue
+@docs EditableWebData, create, mapEditable, value, webDataUpdate, webDataValue
 
 -}
 
@@ -55,29 +53,36 @@ create record =
     EditableWebData (Editable.ReadOnly record) NotAsked
 
 
-{-| Pipes function to `Editable.map`
--}
-map : (a -> a) -> EditableWebData a -> EditableWebData a
-map f (EditableWebData editable webData) =
-    EditableWebData (Editable.map f editable) webData
+{-| Maps function to the `Editable`.
 
+    import Editable
 
-{-| Maps `Editable` functions. That is, unlike `map` it keeps the `Editable`
-value wrapped.
+    EditableWebData.create "old"
+        |> EditableWebData.mapEditable (Editable.edit)
+        |> EditableWebData.mapEditable (Editable.update "new")
+        |> EditableWebData.value
+        |> Editable.value --> "new"
+
 -}
 mapEditable : (Editable a -> Editable a) -> EditableWebData a -> EditableWebData a
 mapEditable f (EditableWebData editable webData) =
     EditableWebData (f editable) webData
 
 
-{-| Pipes update to `Editable.update`.
--}
-update : a -> EditableWebData a -> EditableWebData a
-update value =
-    map (always value)
-
-
 {-| Updates the `WebData` value.
+
+For updating the value of the `Editable` itself, see the example of `mapEditable`.
+
+    import RemoteData
+
+    EditableWebData.create "new"
+        |> EditableWebData.webDataUpdate RemoteData.Loading
+        |> EditableWebData.webDataValue --> RemoteData.Loading
+
+    EditableWebData.create "new"
+        |> EditableWebData.webDataUpdate (RemoteData.Success ())
+        |> EditableWebData.webDataValue --> RemoteData.Success ()
+
 -}
 webDataUpdate : WebData () -> EditableWebData a -> EditableWebData a
 webDataUpdate newWebData (EditableWebData editable webData) =
@@ -103,6 +108,16 @@ value (EditableWebData x _) =
 
 
 {-| Extracts the `WebData` value.
+
+    import RemoteData
+
+    EditableWebData.create "new"
+        |> EditableWebData.webDataValue --> RemoteData.NotAsked
+
+    EditableWebData.create "new"
+        |> EditableWebData.webDataUpdate RemoteData.Loading
+        |> EditableWebData.webDataValue --> RemoteData.Loading
+
 -}
 webDataValue : EditableWebData a -> WebData ()
 webDataValue (EditableWebData _ x) =
