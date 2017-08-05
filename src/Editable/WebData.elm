@@ -64,7 +64,7 @@ notAskedReadOnly record =
         |> Editable.value --> "new"
 
 -}
-map : (Editable a -> Editable b) -> EditableWebData a -> EditableWebData b
+map : (Editable a -> Editable a) -> EditableWebData a -> EditableWebData a
 map f (EditableWebData editable webData) =
     EditableWebData (f editable) webData
 
