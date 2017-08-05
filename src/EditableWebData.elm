@@ -57,14 +57,14 @@ notAskedReadOnly record =
 
     import Editable
 
-    EditableWebData.create "old"
+    EditableWebData.notAskedReadOnly "old"
         |> EditableWebData.mapEditable (Editable.edit)
         |> EditableWebData.mapEditable (Editable.update "new")
         |> EditableWebData.value
         |> Editable.value --> "new"
 
 -}
-mapEditable : (Editable a -> Editable a) -> EditableWebData a -> EditableWebData a
+mapEditable : (Editable a -> Editable b) -> EditableWebData a -> EditableWebData b
 mapEditable f (EditableWebData editable webData) =
     EditableWebData (f editable) webData
 
