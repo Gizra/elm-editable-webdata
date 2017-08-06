@@ -1,7 +1,7 @@
 module Tests exposing (..)
 
 import Editable
-import EditableWebData exposing (EditableWebData(..))
+import Editable.WebData exposing (EditableWebData(..))
 import Expect
 import Fuzz exposing (..)
 import Test exposing (..)
@@ -9,12 +9,12 @@ import Test exposing (..)
 
 all : Test
 all =
-    describe "EditableWebData"
-        [ describe "#value"
+    describe "Editable.WebData"
+        [ describe "#toEditable"
             [ fuzz string "return the `Editable` value" <|
                 \value ->
-                    EditableWebData.create value
-                        |> EditableWebData.value
+                    Editable.WebData.create value
+                        |> Editable.WebData.toEditable
                         |> Expect.equal (Editable.ReadOnly value)
             ]
         ]
