@@ -1,8 +1,8 @@
 module Editable.WebData
     exposing
         ( EditableWebData(..)
+        , create
         , map
-        , notAskedReadOnly
         , state
         , toEditable
         , toWebData
@@ -14,10 +14,10 @@ module Editable.WebData
 and [WebData](http://package.elm-lang.org/packages/krisajenkins/remotedata/latest)
 
 It is used in order to keep track of the state of the Editable upon saving. That is,
-as we change the `Editable` value, and send it to the backend, we can keep track of their status
+as we change the `Editable` value, and send it to the backend, we can keep track of their state
 (e.g. `RemoteData.Success` or `RemoteData.Failure`).
 
-@docs EditableWebData, notAskedReadOnly, map, toEditable, state, toWebData
+@docs EditableWebData, create, map, toEditable, state, toWebData
 
 -}
 
@@ -47,9 +47,29 @@ type EditableWebData a
 
 
 {-| Creates a new `EditableWebData`.
+
+This will create the `EditableWebData` with the default values `ReadOnly` for
+the `Editable` and `NotAsked` for the WebData, as those are the values you are
+likely to begin with. You can of course later updated it, for example:
+
+    import Editable
+    import RemoteData
+
+    -- Change the `Editable` value
+    Editable.WebData.create "old"
+        |> Editable.WebData.map (Editable.edit)
+        |> Editable.WebData.map (Editable.update "new")
+        |> Editable.WebData.toEditable
+        |> Editable.value --> "new"
+
+    -- Change the `WebData` state
+    Editable.WebData.create "original"
+        |> Editable.WebData.state RemoteData.Loading
+        |> Editable.WebData.toWebData --> RemoteData.Loading
+
 -}
-notAskedReadOnly : a -> EditableWebData a
-notAskedReadOnly record =
+create : a -> EditableWebData a
+create record =
     EditableWebData (Editable.ReadOnly record) NotAsked
 
 
@@ -57,7 +77,7 @@ notAskedReadOnly record =
 
     import Editable
 
-    Editable.WebData.notAskedReadOnly "old"
+    Editable.WebData.create "old"
         |> Editable.WebData.map (Editable.edit)
         |> Editable.WebData.map (Editable.update "new")
         |> Editable.WebData.toEditable
@@ -75,11 +95,11 @@ For updating the value of the `Editable` itself, see the example of `map`.
 
     import RemoteData
 
-    Editable.WebData.notAskedReadOnly "new"
+    Editable.WebData.create "new"
         |> Editable.WebData.state RemoteData.Loading
         |> Editable.WebData.toWebData --> RemoteData.Loading
 
-    Editable.WebData.notAskedReadOnly "new"
+    Editable.WebData.create "new"
         |> Editable.WebData.state (RemoteData.Success ())
         |> Editable.WebData.toWebData --> RemoteData.Success ()
 
@@ -93,10 +113,10 @@ state newWebData (EditableWebData editable webData) =
 
     import Editable
 
-    Editable.WebData.notAskedReadOnly "new"
+    Editable.WebData.create "new"
         |> Editable.WebData.toEditable --> Editable.ReadOnly "new"
 
-    Editable.WebData.notAskedReadOnly "old"
+    Editable.WebData.create "old"
         |> Editable.WebData.map(Editable.edit)
         |> Editable.WebData.map(Editable.update "new")
         |> Editable.WebData.toEditable --> Editable.Editable "old" "new"
@@ -111,10 +131,10 @@ toEditable (EditableWebData x _) =
 
     import RemoteData
 
-    Editable.WebData.notAskedReadOnly "new"
+    Editable.WebData.create "new"
         |> Editable.WebData.toWebData --> RemoteData.NotAsked
 
-    Editable.WebData.notAskedReadOnly "new"
+    Editable.WebData.create "new"
         |> Editable.WebData.state RemoteData.Loading
         |> Editable.WebData.toWebData --> RemoteData.Loading
 
