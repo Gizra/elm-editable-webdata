@@ -78,10 +78,16 @@ create record =
     import Editable
 
     Editable.WebData.create "old"
-        |> Editable.WebData.map (Editable.edit)
-        |> Editable.WebData.map (Editable.update "new")
+        -- Convert to `Editable` and update the value in one go.
+        |> Editable.WebData.map (Editable.edit >> Editable.map (always "new"))
         |> Editable.WebData.toEditable
         |> Editable.value --> "new"
+
+    Editable.WebData.create "old"
+        -- Convert to `Editable` and update the value in one go.
+        |> Editable.WebData.map (Editable.edit >> Editable.map (\val -> val ++ " is now new"))
+        |> Editable.WebData.toEditable
+        |> Editable.value --> "old is now new"
 
 -}
 map : (Editable a -> Editable a) -> EditableWebData a -> EditableWebData a
