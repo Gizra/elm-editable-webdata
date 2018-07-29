@@ -1,7 +1,7 @@
 module Tests exposing (..)
 
 import Editable
-import Editable.WebData exposing (EditableWebData(..))
+import Editable.WebData exposing (EditableWebData)
 import Expect
 import Fuzz exposing (..)
 import Test exposing (..)
