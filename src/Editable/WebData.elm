@@ -18,7 +18,7 @@ It is used in order to keep track of the state of the Editable upon saving. That
 as we change the `Editable` value, and send it to the backend, we can keep track of their state
 (e.g. `RemoteData.Success` or `RemoteData.Failure`).
 
-@docs EditableWebDataWrapper, create, map, toEditable, state, toWebData
+@docs EditableWebData, EditableWebDataWrapper, create, map, toEditable, state, toWebData
 
 -}
 
@@ -26,6 +26,9 @@ import Editable exposing (Editable(..))
 import RemoteData exposing (RemoteData(..), WebData)
 
 
+{-| Most typical use case, is to wrap an `Editable` value, and have a unit (`()`)
+act the the value of the WebData.
+-}
 type alias EditableWebData a =
     EditableWebDataWrapper a ()
 
