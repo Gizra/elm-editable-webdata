@@ -1,6 +1,7 @@
 module Editable.WebData
     exposing
         ( EditableWebData
+        , EditableWebDataWrapper
         , create
         , map
         , state
@@ -8,16 +9,16 @@ module Editable.WebData
         , toWebData
         )
 
-{-| An Wrapper represents an Editable value, along with WebData.
+{-| An EditableWebDataWrapper represents an Editable value, along with WebData.
 
-`Wrapper` is a wrapper type around [Editable](http://package.elm-lang.org/packages/stoeffel/editable/latest)
+`EditableWebDataWrapper` is a wrapper type around [Editable](http://package.elm-lang.org/packages/stoeffel/editable/latest)
 and [WebData](http://package.elm-lang.org/packages/krisajenkins/remotedata/latest)
 
 It is used in order to keep track of the state of the Editable upon saving. That is,
 as we change the `Editable` value, and send it to the backend, we can keep track of their state
 (e.g. `RemoteData.Success` or `RemoteData.Failure`).
 
-@docs Wrapper, create, map, toEditable, state, toWebData
+@docs EditableWebDataWrapper, create, map, toEditable, state, toWebData
 
 -}
 
@@ -26,7 +27,7 @@ import RemoteData exposing (RemoteData(..), WebData)
 
 
 type alias EditableWebData a =
-    Wrapper a ()
+    EditableWebDataWrapper a ()
 
 
 {-| A wrapper for `Editable`, that allows provides the means to track saving
@@ -37,7 +38,7 @@ success value), you can pass a unit value (`()`).
 
     import Editable
 
-    view : Wrapper String -> Html msg
+    view : EditableWebDataWrapper String -> Html msg
     view editableWebData =
         let
             value =
@@ -49,13 +50,13 @@ success value), you can pass a unit value (`()`).
         text <| "Editable value is: " ++ toString value ++ " with a WebDataValue of " ++ toString toWebData
 
 -}
-type Wrapper a b
-    = Wrapper (Editable a) (WebData b)
+type EditableWebDataWrapper a b
+    = EditableWebDataWrapper (Editable a) (WebData b)
 
 
-{-| Creates a new `Wrapper`.
+{-| Creates a new `EditableWebDataWrapper`.
 
-This will create the `Wrapper` with the default values `ReadOnly` for
+This will create the `EditableWebDataWrapper` with the default values `ReadOnly` for
 the `Editable` and `NotAsked` for the WebData, as those are the values you are
 likely to begin with. You can of course later updated it, for example:
 
@@ -75,9 +76,9 @@ likely to begin with. You can of course later updated it, for example:
         |> Editable.WebData.toWebData --> RemoteData.Loading
 
 -}
-create : a -> Wrapper a b
+create : a -> EditableWebDataWrapper a b
 create record =
-    Wrapper (Editable.ReadOnly record) NotAsked
+    EditableWebDataWrapper (Editable.ReadOnly record) NotAsked
 
 
 {-| Maps function to the `Editable`.
@@ -97,9 +98,9 @@ create record =
         |> Editable.value --> "old is now new"
 
 -}
-map : (Editable a -> Editable a) -> Wrapper a b -> Wrapper a b
-map f (Wrapper editable webData) =
-    Wrapper (f editable) webData
+map : (Editable a -> Editable a) -> EditableWebDataWrapper a b -> EditableWebDataWrapper a b
+map f (EditableWebDataWrapper editable webData) =
+    EditableWebDataWrapper (f editable) webData
 
 
 {-| Updates the `WebData` value.
@@ -117,9 +118,9 @@ For updating the value of the `Editable` itself, see the example of `map`.
         |> Editable.WebData.toWebData --> RemoteData.Success ()
 
 -}
-state : WebData b -> Wrapper a b -> Wrapper a b
-state newWebData (Wrapper editable webData) =
-    Wrapper editable newWebData
+state : WebData b -> EditableWebDataWrapper a b -> EditableWebDataWrapper a b
+state newWebData (EditableWebDataWrapper editable webData) =
+    EditableWebDataWrapper editable newWebData
 
 
 {-| Extracts the `Editable` value.
@@ -135,8 +136,8 @@ state newWebData (Wrapper editable webData) =
         |> Editable.WebData.toEditable --> Editable.Editable "old" "new"
 
 -}
-toEditable : Wrapper a b -> Editable a
-toEditable (Wrapper x _) =
+toEditable : EditableWebDataWrapper a b -> Editable a
+toEditable (EditableWebDataWrapper x _) =
     x
 
 
@@ -152,6 +153,6 @@ toEditable (Wrapper x _) =
         |> Editable.WebData.toWebData --> RemoteData.Loading
 
 -}
-toWebData : Wrapper a b -> WebData b
-toWebData (Wrapper _ x) =
+toWebData : EditableWebDataWrapper a b -> WebData b
+toWebData (EditableWebDataWrapper _ x) =
     x
