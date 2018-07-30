@@ -1,5 +1,5 @@
 {
-    "version": "1.0.1",
+    "version": "2.0.0",
     "summary": "An EditableWebData represents an Editable value, along with WebData.",
     "repository": "https://github.com/Gizra/elm-editable-webdata.git",
     "license": "BSD3",
