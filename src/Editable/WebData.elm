@@ -60,7 +60,7 @@ likely to begin with. You can of course later updated it, for example:
     -- Change the `Editable` value
     Editable.WebData.create "old"
         |> Editable.WebData.map (Editable.edit)
-        |> Editable.WebData.map (Editable.update "new")
+        |> Editable.WebData.map (Editable.map (always "new"))
         |> Editable.WebData.toEditable
         |> Editable.value --> "new"
 
@@ -126,7 +126,7 @@ state newWebData (EditableWebDataWrapper editable webData) =
 
     Editable.WebData.create "old"
         |> Editable.WebData.map(Editable.edit)
-        |> Editable.WebData.map(Editable.update "new")
+        |> Editable.WebData.map(Editable.map (always "new"))
         |> Editable.WebData.toEditable --> Editable.Editable "old" "new"
 
 -}
