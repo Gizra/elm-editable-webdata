@@ -1,13 +1,4 @@
-module Editable.WebData
-    exposing
-        ( EditableWebData
-        , EditableWebDataWrapper
-        , create
-        , map
-        , state
-        , toEditable
-        , toWebData
-        )
+module Editable.WebData exposing (EditableWebData, EditableWebDataWrapper, create, map, toEditable, state, toWebData)
 
 {-| An EditableWebDataWrapper represents an Editable value, along with WebData.
 
