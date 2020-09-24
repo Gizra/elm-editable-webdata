@@ -12,7 +12,7 @@ cache:
 os:
   - linux
 
-env: ELM_VERSION=0.19.1
+env: ELM_VERSION=~0.19.1
 
 before_install:
   - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
