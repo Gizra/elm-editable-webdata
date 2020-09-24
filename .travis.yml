@@ -1,8 +1,7 @@
 sudo: false
 
 language: elm
-elm:
-  - 0.19.1
+elm: 0.19.1
 elm-test: 0.19.1-revision4
 elm-format: 0.8.3
 
