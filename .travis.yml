@@ -8,6 +8,13 @@ node_js:
 os:
   - linux
 
+env:
+ - PATH=$TRAVIS_BUILD_DIR/node_modules/.bin:$TRAVIS_BUILD_DIR/sysconfcpus/bin:$PATH
+
+cache:
+  directories:
+    - sysconfcpus
+
 before_install:
   - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 
