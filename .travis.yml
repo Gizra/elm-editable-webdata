@@ -1,6 +1,10 @@
 sudo: false
 
-language: node_js
+language: elm
+elm:
+  - elm@0.19.1
+elm-test: 0.19.1-revision4
+elm-format: 0.8.3
 node_js:
   - 8
 
@@ -12,15 +16,13 @@ cache:
 os:
   - linux
 
-env: ELM_VERSION=~0.19.1
-
 before_install:
   - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 
 install:
   - node --version
   - npm --version
-  - npm install -g elm@$ELM_VERSION elm-test@0.19.1-revision4 elm-format@0.8.3 elm-verify-examples@5.0.0
+  - npm install -g elm-verify-examples@5.0.0
 
 script:
   - elm-format --validate src tests
