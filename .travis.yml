@@ -1,18 +1,19 @@
-sudo: false
-
-language: node_js
+language: elm
+elm: 0.19.0
+elm-test: 0.19.0-rev6
+elm-format: 0.8.3
 node_js:
   - 8.10.0
 
-cache:
-  directories:
-    - elm-stuff/build-artifacts
-    - elm-stuff/packages
-    - sysconfcpus
 os:
   - linux
 
-env: ELM_VERSION=0.19.0
+env:
+ - PATH=$TRAVIS_BUILD_DIR/node_modules/.bin:$TRAVIS_BUILD_DIR/sysconfcpus/bin:$PATH
+
+cache:
+  directories:
+    - sysconfcpus
 
 before_install:
   - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
@@ -20,7 +21,7 @@ before_install:
 install:
   - node --version
   - npm --version
-  - npm install -g elm@$ELM_VERSION elm-test@0.19.0-rev6 elm-format@0.8.3 elm-verify-examples@5.0.0
+  - npm install -g elm-verify-examples@5.0.0
 
 script:
   - elm-format --validate src tests
