@@ -3,7 +3,7 @@
     "name": "Gizra/elm-editable-webdata",
     "summary": "An EditableWebData represents an Editable value, along with WebData.",
     "license": "BSD-3-Clause",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "exposed-modules": [
         "Editable.WebData"
     ],
